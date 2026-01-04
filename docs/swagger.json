@@ -1,0 +1,221 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for time operations and WebSockets",
+        "title": "Go TimeDate API",
+        "contact": {},
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.HealthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/time": {
+            "get": {
+                "tags": [
+                    "Time"
+                ],
+                "summary": "Get current time",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Timezone (default UTC)",
+                        "name": "timezone",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TimeResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/time/convert": {
+            "post": {
+                "tags": [
+                    "Time"
+                ],
+                "summary": "Convert time",
+                "parameters": [
+                    {
+                        "description": "Conversion request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TimeConvertRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TimeConvertResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/time/{timezone}": {
+            "get": {
+                "tags": [
+                    "Time"
+                ],
+                "summary": "Get time by timezone",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Timezone",
+                        "name": "timezone",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TimeResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/timezones": {
+            "get": {
+                "tags": [
+                    "Time"
+                ],
+                "summary": "Get available timezones",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TimezoneInfo"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.HealthResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "example": "healthy"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2024-01-03T14:30:45Z"
+                },
+                "version": {
+                    "type": "string",
+                    "example": "1.0.0"
+                }
+            }
+        },
+        "models.TimeConvertRequest": {
+            "type": "object",
+            "properties": {
+                "from_timezone": {
+                    "type": "string",
+                    "example": "UTC"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2024-01-03T14:30:45Z"
+                },
+                "to_timezone": {
+                    "type": "string",
+                    "example": "America/New_York"
+                }
+            }
+        },
+        "models.TimeConvertResponse": {
+            "type": "object",
+            "properties": {
+                "converted": {
+                    "$ref": "#/definitions/models.TimeResponse"
+                },
+                "offset_hours": {
+                    "type": "number",
+                    "example": -5
+                },
+                "offset_minutes": {
+                    "type": "integer",
+                    "example": -300
+                },
+                "original": {
+                    "$ref": "#/definitions/models.TimeResponse"
+                }
+            }
+        },
+        "models.TimeResponse": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "example": "Wednesday, January 3, 2024"
+                },
+                "formatted": {
+                    "type": "string",
+                    "example": "2:30:45 PM"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "example": "2024-01-03T14:30:45Z"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "UTC"
+                },
+                "unix": {
+                    "type": "integer",
+                    "example": 1704315045
+                }
+            }
+        },
+        "models.TimezoneInfo": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "string",
+                    "example": "2:30:45 PM"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "America/New_York"
+                },
+                "offset": {
+                    "type": "number",
+                    "example": -5
+                }
+            }
+        }
+    }
+}

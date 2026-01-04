@@ -1,0 +1,147 @@
+basePath: /api/v1
+definitions:
+  models.HealthResponse:
+    properties:
+      status:
+        example: healthy
+        type: string
+      timestamp:
+        example: "2024-01-03T14:30:45Z"
+        type: string
+      version:
+        example: 1.0.0
+        type: string
+    type: object
+  models.TimeConvertRequest:
+    properties:
+      from_timezone:
+        example: UTC
+        type: string
+      timestamp:
+        example: "2024-01-03T14:30:45Z"
+        type: string
+      to_timezone:
+        example: America/New_York
+        type: string
+    type: object
+  models.TimeConvertResponse:
+    properties:
+      converted:
+        $ref: '#/definitions/models.TimeResponse'
+      offset_hours:
+        example: -5
+        type: number
+      offset_minutes:
+        example: -300
+        type: integer
+      original:
+        $ref: '#/definitions/models.TimeResponse'
+    type: object
+  models.TimeResponse:
+    properties:
+      date:
+        example: Wednesday, January 3, 2024
+        type: string
+      formatted:
+        example: 2:30:45 PM
+        type: string
+      timestamp:
+        example: "2024-01-03T14:30:45Z"
+        type: string
+      timezone:
+        example: UTC
+        type: string
+      unix:
+        example: 1704315045
+        type: integer
+    type: object
+  models.TimezoneInfo:
+    properties:
+      current:
+        example: 2:30:45 PM
+        type: string
+      name:
+        example: America/New_York
+        type: string
+      offset:
+        example: -5
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API for time operations and WebSockets
+  title: Go TimeDate API
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HealthResponse'
+      summary: Health check
+      tags:
+      - Health
+  /time:
+    get:
+      parameters:
+      - description: Timezone (default UTC)
+        in: query
+        name: timezone
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TimeResponse'
+      summary: Get current time
+      tags:
+      - Time
+  /time/{timezone}:
+    get:
+      parameters:
+      - description: Timezone
+        in: path
+        name: timezone
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TimeResponse'
+      summary: Get time by timezone
+      tags:
+      - Time
+  /time/convert:
+    post:
+      parameters:
+      - description: Conversion request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.TimeConvertRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TimeConvertResponse'
+      summary: Convert time
+      tags:
+      - Time
+  /timezones:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TimezoneInfo'
+            type: array
+      summary: Get available timezones
+      tags:
+      - Time
+swagger: "2.0"
