@@ -105,7 +105,7 @@ systemctl status "$SERVICE_NAME" --no-pager
 
 echo ""
 echo "Access the API at: http://localhost:8080"
-echo "Web Interface: http://localhost:8080/ws-test"
+echo "Web Interface: http://localhost:8080"
 echo "Documentation: http://localhost:8080/swagger/index.html"
 echo ""
 echo "Configuration: $INSTALL_DIR/config.env"

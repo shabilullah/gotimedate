@@ -8,7 +8,7 @@ A high-performance RESTful API for time operations with real-time WebSocket stre
 ## Features
 - **REST API**: Comprehensive timezone-aware time operations.
 - **WebSocket Streaming**: Real-time clock updates with customizable formats.
-- **Interactive UI**: Premium dark-mode test interface at `/ws-test`.
+- **Interactive UI**: Premium dark-mode interface at `/`.
 - **Auto-Config**: Self-generates configuration on first run.
 - **API Docs**: Integrated Swagger UI documentation.
 
@@ -179,7 +179,7 @@ The server streams updates every second with accurate timezone conversion:
 ```
 
 ## Interactive Tools
-- **Live Clock Interface**: [http://localhost:8080/ws-test](http://localhost:8080/ws-test)
+- **Live Clock Interface**: [http://localhost:8080](http://localhost:8080)
 - **Swagger Documentation**: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
 
 ## Configuration

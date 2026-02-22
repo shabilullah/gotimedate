@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 )
 
-//go:embed static/websocket-test.html
+//go:embed static/index.html
 var defaultHTML []byte
 
 // @title Go TimeDate API

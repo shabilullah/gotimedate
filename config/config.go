@@ -103,10 +103,10 @@ func LoadConfig(defaultHTML []byte) *Config {
 		}
 	}
 
-	htmlPath := filepath.Join(staticDirPath, "websocket-test.html")
-	log.Infof("Ensuring latest WebSocket test file at %s", htmlPath)
+	htmlPath := filepath.Join(staticDirPath, "index.html")
+	log.Infof("Ensuring latest index file at %s", htmlPath)
 	if err := os.WriteFile(htmlPath, defaultHTML, 0644); err != nil {
-		log.Fatalf("Error updating websocket-test.html: %v", err)
+		log.Fatalf("Error updating index.html: %v", err)
 	}
 
 	cfg := &Config{

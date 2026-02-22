@@ -55,11 +55,6 @@ func SetupRouter(cfg *config.Config) *fiber.App {
 
 	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	app.Get("/ws-test", func(c *fiber.Ctx) error {
-		indexFile := filepath.Join(cfg.StaticDir, "websocket-test.html")
-		return c.SendFile(indexFile)
-	})
-
 	app.Get("/health", timeHandler.HealthCheck)
 
 	api := app.Group("/api/v1")
@@ -69,11 +64,8 @@ func SetupRouter(cfg *config.Config) *fiber.App {
 	api.Post("/time/convert", timeHandler.ConvertTime)
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"name":        "Go TimeDate API",
-			"version":     "1.0.0",
-			"description": "API for time operations and WebSockets",
-		})
+		indexFile := filepath.Join(cfg.StaticDir, "index.html")
+		return c.SendFile(indexFile)
 	})
 
 	return app
