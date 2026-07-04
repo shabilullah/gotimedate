@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /gotimedate .
 # Stage 2: Runtime
 FROM alpine:3.21
 
-RUN apk add --no-cache ca-certificates tzdata wget
+RUN apk add --no-cache ca-certificates tzdata wget tini
 
 WORKDIR /app
 
@@ -37,5 +37,6 @@ RUN mkdir -p /app/logs
 # Expose port
 EXPOSE 8080
 
-# Run the application
+# Use tini as PID 1 for proper signal forwarding (critical for prefork mode)
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/app/gotimedate"]

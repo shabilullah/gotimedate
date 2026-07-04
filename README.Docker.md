@@ -79,6 +79,20 @@ docker run -d \
   ghcr.io/shabilullah/gotimedate:latest
 ```
 
+### Prefork Mode
+
+`PREFORK=true` spawns one worker process per CPU core via Fiber's prefork. This image uses [tini](https://github.com/krallin/tini) as PID 1 to properly forward signals (SIGTERM/SIGINT) to the master process — without it, the container would restart on every stop/redeploy because Docker's signal never reaches the children.
+
+**When to enable:**
+- Multi-core hosts with high concurrent throughput
+- CPU-bound workloads that benefit from kernel-level load balancing across cores
+
+**When to leave disabled (default):**
+- Single-core containers or CPU limits set to 1
+- I/O-bound workloads (WebSocket-heavy, proxy patterns)
+- Kubernetes — prefer horizontal pod autoscaling over in-container prefork
+
+
 ### Health Check
 
 The container includes a health check that monitors:
