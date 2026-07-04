@@ -1,229 +1,151 @@
-# Go TimeDate API
+# GoTimeDate API
 
-A high-performance RESTful API for time operations with real-time WebSocket streaming. Built with Go and the Fiber framework.
-
-> [!IMPORTANT]
-> **Disclaimer:** This software is created and tailored specifically for my own personal usage. No support, maintenance, or guarantees are provided. Use it at your own risk.
+A high-performance REST API and WebSocket server for time operations built with Go and Fiber.
 
 ## Features
-- **REST API**: Comprehensive timezone-aware time operations.
-- **WebSocket Streaming**: Real-time clock updates with customizable formats.
-- **Interactive UI**: Premium dark-mode interface at `/`.
-- **Auto-Config**: Self-generates configuration on first run.
-- **API Docs**: Integrated Swagger UI documentation.
 
-## Getting Started
+- 🚀 Fast and lightweight using Fiber framework
+- 🔌 WebSocket support for real-time time updates
+- 📝 Swagger/OpenAPI documentation
+- 🐳 Docker support with multi-platform builds
+- ⚙️ Configurable via environment variables
+- 📊 Structured logging
+- 🌐 CORS support
 
-### Prerequisites
-- Go 1.24+
+## Quick Start
 
-### Installation & Run
+### Local Development
+
 ```bash
-# Clone and enter the project
+# Clone the repository
 git clone https://github.com/shabilullah/gotimedate.git
 cd gotimedate
 
-# Install dependencies and run
-go mod tidy
+# Install dependencies
+go mod download
+
+# Run the server
 go run main.go
 ```
-The server starts at `http://localhost:8080`.
 
-### Build Instructions
+The server will start on `http://localhost:8080`
 
-#### For Windows
-```powershell
-go build -o build/gotimedate.exe main.go
-```
-
-#### For Linux (cross-compile from Windows)
-```powershell
-$env:GOOS="linux"; $env:GOARCH="amd64"; go build -o build/gotimedate main.go
-```
-
-#### For Linux/debian (native)
-```bash
-go build -o build/gotimedate main.go
-```
-
-### Linux Service Installation & Updates (Debian/Ubuntu)
-
-The fastest way to install or **update** the API as a background systemd service is using this one-liner:
+### Using Docker
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/shabilullah/gotimedate/master/scripts/install.sh | sudo bash
+# Pull and run from GitHub Container Registry
+docker pull ghcr.io/shabilullah/gotimedate:latest
+docker run -d -p 8080:8080 ghcr.io/shabilullah/gotimedate:latest
 ```
 
-Alternatively, if you have already cloned the repository:
+For detailed Docker deployment instructions, see [README.Docker.md](README.Docker.md)
 
-```bash
-sudo ./scripts/install.sh
-```
+## API Documentation
 
-This script will:
-1. Verify OS compatibility (Ubuntu/Debian).
-2. Install dependencies (`git`, `golang-go`).
-3. **Download/Update**: Clones the repo to `/opt/gotimedate` or pulls the latest `master`.
-4. **Safety**: Stops the service automatically before recompiling.
-5. **Build**: Rebuilds the binary natively from source.
-6. **Persistence**: Configures the systemd service and restarts it.
+Once the server is running, visit:
+- Swagger UI: `http://localhost:8080/swagger/`
+- Health check: `http://localhost:8080/health`
+- API base: `http://localhost:8080/api/v1/`
 
-#### Service Management
-```bash
-# Check status
-sudo systemctl status gotimedate
+### Available Endpoints
 
-# Start/Stop/Restart
-sudo systemctl start gotimedate
-sudo systemctl stop gotimedate
-sudo systemctl restart gotimedate
-```
-
-#### Uninstallation
-To completely remove the service, user, and all data:
-```bash
-# If using the one-liner from GitHub
-curl -sSL https://raw.githubusercontent.com/shabilullah/gotimedate/master/scripts/uninstall.sh | sudo bash
-```
-```bash
-# Or if you have the repo locally
-sudo ./scripts/uninstall.sh
-```
-
-## API Reference
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/health` | Service health & version |
-| `GET` | `/api/v1/time` | Current time (default UTC) |
-| `GET` | `/api/v1/time/{tz}` | Time for specific timezone |
-| `GET` | `/api/v1/timezones` | List all available timezones |
-| `POST` | `/api/v1/time/convert`| Convert time between zones |
-| `WS` | `/ws/time` | WebSocket streaming endpoint |
-
-## Usage Examples
-
-### Current Time (UTC)
-`GET /api/v1/time`
-```json
-{
-  "timestamp": "2026-01-04T16:58:00Z",
-  "timezone": "UTC",
-  "unix": 1736035080,
-  "unix_offset": 0,
-  "formatted": "4:58:00 PM",
-  "date": "Saturday, January 4, 2026"
-}
-```
-
-### Timezone Conversion
-`POST /api/v1/time/convert`
-```json
-{
-  "from_timezone": "UTC",
-  "to_timezone": "America/New_York",
-  "timestamp": "2026-01-04T16:58:00Z"
-}
-```
-**Response:**
-```json
-{
-  "original": { 
-    "timestamp": "2026-01-04T16:58:00Z",
-    "timezone": "UTC", 
-    "unix": 1736035080,
-    "unix_offset": 0,
-    "formatted": "4:58:00 PM",
-    "date": "Saturday, January 4, 2026"
-  },
-  "converted": { 
-    "timestamp": "2026-01-04T11:58:00-05:00",
-    "timezone": "America/New_York", 
-    "unix": 1736035080,
-    "unix_offset": -18000,
-    "formatted": "11:58:00 AM",
-    "date": "Saturday, January 4, 2026"
-  },
-  "offset_hours": -5.0
-}
-```
-
-### WebSocket Protocol
-`WS /ws/time`
-
-#### Subscribe/Update (Input)
-Send a JSON message to change the timezone or time format:
-```json
-{
-  "action": "subscribe",
-  "timezone": "America/New_York",
-  "format": "24hour"
-}
-```
-
-#### Time Update (Output)
-The server streams updates every second with accurate timezone conversion:
-```json
-{
-  "type": "time_update",
-  "timestamp": "2026-01-05T18:37:40+08:00",
-  "data": {
-    "timestamp": "2026-01-05T05:37:40-05:00",
-    "timezone": "America/New_York",
-    "unix": 1736073460,
-    "unix_offset": -18000,
-    "formatted": "05:37:40",
-    "date": "Monday, January 5, 2026"
-  }
-}
-```
-
-## Interactive Tools
-- **Live Clock Interface**: [http://localhost:8080](http://localhost:8080)
-- **Swagger Documentation**: [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
+- `GET /health` - Health check endpoint
+- `GET /api/v1/time` - Get current time
+- `GET /api/v1/timezones` - List available timezones
+- `GET /api/v1/time/:timezone` - Get time in specific timezone
+- `POST /api/v1/time/convert` - Convert time between timezones
+- `GET /ws/time` - WebSocket endpoint for real-time time updates
 
 ## Configuration
-At runtime, `config.env` is created automatically. You can customize the behavior of the API by modifying this file.
 
-### `config.env` Example
-Configure `ALLOWED_ORIGINS` using commas to separate multiple values. It supports standard origins, wildcard subdomains, and wildcard ports for both **REST API** and **WebSocket** connections:
+Create a `.env` file in the project root:
 
 ```env
+# Server
 PORT=8080
-HOST=localhost
-
-# Performance
-# Enable prefork for better performance (multiple processes)
+HOST=0.0.0.0
 PREFORK=false
 
-# CORS Configuration
-# Single origin: https://app.example.com
-# Wildcard subdomain: https://*.example.com
-# Wildcard port: http://localhost:*
-ALLOWED_ORIGINS=http://localhost:3000,https://*.example.com,http://localhost:*
+# CORS
+ALLOWED_ORIGINS=*
+ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+ALLOWED_HEADERS=Origin,Content-Type,Accept,Authorization
+ALLOW_CREDENTIALS=true
+MAX_AGE=3600
+
+# WebSocket
+WS_PING_INTERVAL=30
+WS_PONG_WAIT=60
+WS_WRITE_WAIT=10
 
 # Logging
-# Available LOG_LEVEL: debug, info, warn, error
 LOG_LEVEL=info
+LOG_FORMAT=json
+LOG_FILE=server.log
 ```
 
-### Development vs Production Configuration
+## Project Structure
 
-- **Development (`go run`)**: Uses `.env` file if present, ignores `config.env`
-- **Production (binary)**: Uses `config.env` exclusively, generates default if missing
-
-### Error Responses
-All errors return a standardized JSON format:
-
-```json
-{
-  "error": true,
-  "message": "Error description",
-  "code": 400,
-  "path": "/api/v1/time",
-  "method": "GET"
-}
 ```
+.
+├── config/          # Configuration loading
+├── handlers/        # HTTP request handlers
+├── router/          # Route definitions
+├── static/          # Static files (embedded)
+├── main.go          # Application entry point
+├── Dockerfile       # Multi-stage Docker build
+└── docker-compose.yml
+```
+
+## Building
+
+### Local Binary
+
+```bash
+go build -ldflags="-s -w" -o gotimedate .
+./gotimedate
+```
+
+### Docker Image
+
+```bash
+docker build -t gotimedate:local .
+```
+
+## Automated CI/CD
+
+The project includes GitHub Actions workflow that automatically:
+- Builds Docker images on push to main/master
+- Publishes to GitHub Container Registry (GHCR)
+- Creates versioned tags from git tags (e.g., `v1.0.0`)
+- Supports multi-platform builds (amd64, arm64)
+
+## WebSocket Usage
+
+Connect to the WebSocket endpoint for real-time time updates:
+
+```javascript
+const ws = new WebSocket('ws://localhost:8080/ws/time');
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Current time:', data.time);
+};
+```
+
+## Docker Deployment
+
+See [README.Docker.md](README.Docker.md) for comprehensive Docker deployment guide including:
+- Quick start with Docker and Docker Compose
+- Environment variable configuration
+- Production deployment examples
+- Multi-platform support
+- Troubleshooting
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
-MIT License - see [LICENSE](LICENSE) for details.
+
+MIT License

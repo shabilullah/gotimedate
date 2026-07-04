@@ -83,7 +83,7 @@ func LoadConfig(defaultHTML []byte) *Config {
 				log.Fatalf("Error creating default config file: %v", err)
 			}
 		}
-		_ = godotenv.Overload(configPath)
+		_ = godotenv.Load(configPath)
 	}
 
 	staticDirName := getEnv("STATIC_DIR", "static")
