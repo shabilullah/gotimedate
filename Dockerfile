@@ -26,6 +26,7 @@ COPY --from=builder /gotimedate /app/gotimedate
 # Environment variables with defaults
 ENV PORT=8080 \
     HOST=0.0.0.0 \
+    PREFORK=false \
     LOG_FILE=logs/server.log \
     LOG_LEVEL=info \
     DEFAULT_TZ=UTC

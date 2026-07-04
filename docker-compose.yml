@@ -27,6 +27,7 @@ services:
     environment:
       - PORT=9000
       - HOST=0.0.0.0
+      - PREFORK=false
       - LOG_LEVEL=info
       - LOG_FILE=logs/server.log
       # Timezone settings

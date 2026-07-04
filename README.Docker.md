@@ -49,6 +49,7 @@ docker run -d -p 8080:8080 gotimedate:local
 |----------|---------|-------------|
 | `PORT` | `8080` | Server port |
 | `HOST` | `0.0.0.0` | Server host |
+| `PREFORK` | `false` | Enable Fiber prefork (spawns child processes per CPU core) |
 | `LOG_FILE` | `/app/logs/server.log` | Log file path |
 | `LOG_LEVEL` | `info` | Log level (debug, info, warn, error) |
 | `ALLOWED_ORIGINS` | `*` | CORS allowed origins |
@@ -70,6 +71,7 @@ docker run -d \
   -p 8080:8080 \
   -e PORT=8080 \
   -e HOST=0.0.0.0 \
+  -e PREFORK=true \
   -e LOG_LEVEL=warn \
   -e ALLOWED_ORIGINS="https://example.com,https://app.example.com" \
   -v $(pwd)/logs:/app/logs \
