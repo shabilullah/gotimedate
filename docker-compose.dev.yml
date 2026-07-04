@@ -1,27 +1,15 @@
-# GoTimeDate Docker Compose Configuration
+# Docker Compose for local development (builds from source)
 #
-# Quick Start:
-#   docker-compose up -d        # Start service
-#   docker-compose logs -f      # View logs
-#   docker-compose down         # Stop service
-#
-# To Change Port:
-#   Edit TWO places below (all must match):
-#   - Line 22: Change both "9000:9000" numbers (HOST:CONTAINER)
-#   - Line 24: Change PORT=9000 (app reads this)
-#   - Line 42: Change healthcheck port to match
-#
-# For local development (building from source):
-#   Replace the 'image:' line with:
-#     build:
-#       context: .
-#       dockerfile: Dockerfile
+# Usage:
+#   docker-compose -f docker-compose.dev.yml up --build
 
 version: '3.8'
 
 services:
   gotimedate:
-    image: ghcr.io/shabilullah/gotimedate:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "9000:9000"
     environment:
@@ -29,13 +17,11 @@ services:
       - HOST=0.0.0.0
       - LOG_LEVEL=info
       - LOG_FILE=logs/server.log
-      # CORS settings
       - ALLOWED_ORIGINS=*
       - ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
       - ALLOWED_HEADERS=Origin,Content-Type,Accept,Authorization
       - ALLOW_CREDENTIALS=true
       - MAX_AGE=3600
-      # WebSocket settings
       - WS_PING_INTERVAL=30
       - WS_PONG_WAIT=60
       - WS_WRITE_WAIT=10
