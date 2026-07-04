@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /gotimedate .
 # Stage 2: Runtime
 FROM alpine:3.21
 
-RUN apk add --no-cache ca-certificates tzdata
+RUN apk add --no-cache ca-certificates tzdata wget
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ COPY --from=builder /gotimedate /app/gotimedate
 # Environment variables with defaults
 ENV PORT=8080 \
     HOST=0.0.0.0 \
-    LOG_FILE=/app/logs/server.log \
+    LOG_FILE=logs/server.log \
     LOG_LEVEL=info
 
 # Create logs directory
