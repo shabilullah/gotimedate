@@ -18,6 +18,7 @@ type Config struct {
 	Port             string
 	Host             string
 	Prefork          bool
+	DefaultTimezone  string
 	AllowedOrigins   []string
 	AllowedMethods   []string
 	AllowedHeaders   []string
@@ -114,6 +115,7 @@ func LoadConfig(defaultHTML []byte) *Config {
 		Port:             getEnv("PORT", "8080"),
 		Host:             getEnv("HOST", "localhost"),
 		Prefork:          getEnvBool("PREFORK", false),
+		DefaultTimezone:  getEnv("DEFAULT_TZ", "UTC"),
 		AllowedOrigins:   splitEnv("ALLOWED_ORIGINS", ","),
 		AllowedMethods:   splitEnv("ALLOWED_METHODS", ","),
 		AllowedHeaders:   splitEnv("ALLOWED_HEADERS", ","),

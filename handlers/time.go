@@ -12,10 +12,11 @@ import (
 
 type TimeHandler struct {
 	timeService *services.TimeService
+	defaultTZ   string
 }
 
-func NewTimeHandler() *TimeHandler {
-	return &TimeHandler{timeService: services.NewTimeService()}
+func NewTimeHandler(defaultTZ string) *TimeHandler {
+	return &TimeHandler{timeService: services.NewTimeService(), defaultTZ: defaultTZ}
 }
 
 // @Summary Get current time
@@ -24,7 +25,7 @@ func NewTimeHandler() *TimeHandler {
 // @Success 200 {object} models.TimeResponse
 // @Router /time [get]
 func (h *TimeHandler) GetCurrentTime(c *fiber.Ctx) error {
-	tz := c.Query("timezone", "UTC")
+	tz := c.Query("timezone", h.defaultTZ)
 	resp, err := h.timeService.GetCurrentTime(tz)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, err.Error())

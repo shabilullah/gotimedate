@@ -39,7 +39,7 @@ func SetupRouter(cfg *config.Config) *fiber.App {
 		MaxAge:           cfg.MaxAge,
 	}))
 
-	timeHandler := handlers.NewTimeHandler()
+	timeHandler := handlers.NewTimeHandler(cfg.DefaultTimezone)
 	wsHandler := handlers.NewWSHandler(cfg)
 
 	app.Use("/ws/time", func(c *fiber.Ctx) error {

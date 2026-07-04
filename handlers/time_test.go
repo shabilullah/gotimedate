@@ -14,7 +14,7 @@ import (
 
 func TestTimeHandler_HealthCheck(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/health", h.HealthCheck)
 
 	req, _ := http.NewRequest("GET", "/health", nil)
@@ -37,7 +37,7 @@ func TestTimeHandler_HealthCheck(t *testing.T) {
 
 func TestTimeHandler_GetCurrentTime(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/api/v1/time", h.GetCurrentTime)
 
 	req, _ := http.NewRequest("GET", "/api/v1/time?timezone=UTC", nil)
@@ -60,7 +60,7 @@ func TestTimeHandler_GetCurrentTime(t *testing.T) {
 
 func TestTimeHandler_GetTimeByTimezone(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/api/v1/time/*", h.GetTimeByTimezone)
 
 	req, _ := http.NewRequest("GET", "/api/v1/time/America/New_York", nil)
@@ -83,7 +83,7 @@ func TestTimeHandler_GetTimeByTimezone(t *testing.T) {
 
 func TestTimeHandler_GetAvailableTimezones(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/api/v1/timezones", h.GetAvailableTimezones)
 
 	req, _ := http.NewRequest("GET", "/api/v1/timezones", nil)
@@ -106,7 +106,7 @@ func TestTimeHandler_GetAvailableTimezones(t *testing.T) {
 
 func TestTimeHandler_ConvertTime(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Post("/api/v1/time/convert", h.ConvertTime)
 
 	convertReq := models.TimeConvertRequest{
@@ -137,7 +137,7 @@ func TestTimeHandler_ConvertTime(t *testing.T) {
 
 func TestTimeHandler_InputValidation(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/api/v1/time", h.GetCurrentTime)
 	app.Post("/api/v1/time/convert", h.ConvertTime)
 

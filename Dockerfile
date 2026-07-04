@@ -27,7 +27,8 @@ COPY --from=builder /gotimedate /app/gotimedate
 ENV PORT=8080 \
     HOST=0.0.0.0 \
     LOG_FILE=logs/server.log \
-    LOG_LEVEL=info
+    LOG_LEVEL=info \
+    DEFAULT_TZ=UTC
 
 # Create logs directory
 RUN mkdir -p /app/logs

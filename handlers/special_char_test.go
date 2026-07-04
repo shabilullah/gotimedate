@@ -11,7 +11,7 @@ import (
 
 func TestTimeHandler_SpecialCharacterValidation(t *testing.T) {
 	app := fiber.New()
-	h := NewTimeHandler()
+	h := NewTimeHandler("UTC")
 	app.Get("/api/v1/time", h.GetCurrentTime)
 
 	t.Run("Reject SQL injection attempts", func(t *testing.T) {

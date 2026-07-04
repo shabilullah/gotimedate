@@ -29,6 +29,8 @@ services:
       - HOST=0.0.0.0
       - LOG_LEVEL=info
       - LOG_FILE=logs/server.log
+      # Timezone settings
+      - DEFAULT_TZ=Asia/Kuala_Lumpur
       # CORS settings
       - ALLOWED_ORIGINS=*
       - ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS

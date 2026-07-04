@@ -11,10 +11,11 @@ import (
 
 func TestMainRouter(t *testing.T) {
 	cfg := &config.Config{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST"},
-		AllowedHeaders: []string{"Content-Type"},
-		StaticDir:      "static",
+		AllowedOrigins:  []string{"*"},
+		AllowedMethods:  []string{"GET", "POST"},
+		AllowedHeaders:  []string{"Content-Type"},
+		StaticDir:       "static",
+		DefaultTimezone: "UTC",
 	}
 	cfg.CompileOrigins()
 

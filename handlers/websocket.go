@@ -23,7 +23,10 @@ func NewWSHandler(cfg *config.Config) *WSHandler {
 }
 
 func (h *WSHandler) ServeHTTP(c *websocket.Conn) {
-	tz := "UTC"
+	tz := h.cfg.DefaultTimezone
+	if tz == "" {
+		tz = "UTC"
+	}
 	format := "12hour"
 	stop := make(chan bool)
 
